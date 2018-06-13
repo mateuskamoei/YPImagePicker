@@ -63,6 +63,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         
         v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1)
         v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit, YPConfig.library.maxNumberOfItems)
+        v.assetViewContainer.cameraButton.isHidden = !YPConfig.library.showCamera
     }
     
     // MARK: - View Lifecycle
@@ -97,6 +98,15 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                        action: #selector(multipleSelectionButtonTapped),
                        for: .touchUpInside)
         
+        v.assetViewContainer.cameraButton
+            .addTarget(self,
+                       action: #selector(cameraButtonTapped),
+                       for: .touchUpInside)
+        
+        v.assetViewContainer.useButton
+            .addTarget(self,
+                       action: #selector(useButtonTapped),
+                       for: .touchUpInside)
         // Forces assetZoomableView to have a contentSize.
         // otherwise 0 in first selection triggering the bug : "invalid image size 0x0"
         // Also fits the first element to the square if the onlySquareFromLibrary = true
@@ -145,6 +155,16 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         v.collectionView.reloadData()
         checkLimit()
         delegate?.libraryViewDidToggleMultipleSelection(enabled: multipleSelectionEnabled)
+    }
+    
+    @objc
+    func cameraButtonTapped() {
+        delegate?.libraryViewDidToggleCamera()
+    }
+    
+    @objc
+    func useButtonTapped() {
+        delegate?.libraryViewDidToggleUse()
     }
     
     // MARK: - Tap Preview
@@ -262,6 +282,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     self.v.hideGrid()
                     self.delegate?.libraryViewFinishedLoading()
                     self.v.assetViewContainer.refreshSquareCropButton()
+                    self.v.assetViewContainer.showUseButton()
                 }
             case .video:
                 self.v.assetZoomableView.setVideo(asset,
@@ -271,6 +292,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
                     self.v.hideGrid()
                     self.delegate?.libraryViewFinishedLoading()
                     self.v.assetViewContainer.refreshSquareCropButton()
+                    self.v.assetViewContainer.showUseButton()
                 }
             case .audio, .unknown:
                 ()

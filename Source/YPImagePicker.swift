@@ -17,6 +17,7 @@ public class YPImagePicker: UINavigationController {
     public var didSelectVideo: ((Data, UIImage, URL) -> Void)?
     @available(*, deprecated, message: "Use didFinishPicking callback instead")
     public var didCancel: (() -> Void)?
+    public var onCamera: (() -> Void)?
     
     private var _didFinishPicking: (([YPMediaItem], Bool) -> Void)?
     public func didFinishPicking(completion: @escaping (_ items: [YPMediaItem], _ cancelled: Bool) -> Void) {
@@ -68,6 +69,9 @@ public class YPImagePicker: UINavigationController {
         picker.didClose = { [weak self] in
             self?.didCancel?()
             self?._didFinishPicking?([], true)
+        }
+        picker.onCamera = { [weak self] in
+            self?.onCamera?()
         }
         viewControllers = [picker]
         setupLoadingView()
@@ -165,5 +169,13 @@ public class YPImagePicker: UINavigationController {
         )
         loadingView.fillContainer()
         loadingView.alpha = 0
+    }
+    
+    public func showSelectedCountLabel(count: Int) {
+        picker.showSelectedCountLabel(count: count)
+    }
+    
+    public func done() {
+        picker.done()
     }
 }

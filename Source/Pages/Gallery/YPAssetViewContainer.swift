@@ -25,6 +25,12 @@ class YPAssetViewContainer: UIView {
     private let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
     private var shouldCropToSquare = false
     private var isMultipleSelection = false
+    
+    
+    public let bottomView = UIView()
+    public let cameraButton = UIButton()
+    public let useButton = UIButton.init(type: UIButtonType.system)
+    public let countLabel = UILabel()
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -82,6 +88,41 @@ class YPAssetViewContainer: UIView {
         multipleSelectionButton.setImage(YPConfig.icons.multipleSelectionOffIcon, for: .normal)
         multipleSelectionButton.Bottom == zoomableView!.Bottom - 15
         
+        
+        sv(bottomView)
+        bottomView.backgroundColor = UIColor(white: 0, alpha: 0.1)
+        bottomView.Bottom == zoomableView!.Bottom
+        bottomView.height(42)
+        |bottomView|
+        
+        
+        bottomView.sv(cameraButton)
+        cameraButton.size(42)
+        |-15-cameraButton
+        cameraButton.centerVertically()
+        cameraButton.setImage(YPConfig.icons.cameraImage, for: .normal)
+        
+        bottomView.sv(useButton)
+        useButton.width(42)
+        useButton-15-|
+        useButton.centerVertically()
+        useButton.setTitle(YPConfig.wordings.use, for: .normal)
+        useButton.setTitleColor(.white, for: .normal)
+        useButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        
+        bottomView.sv(countLabel)
+        countLabel-15-|
+        countLabel.centerVertically()
+        countLabel.font = UIFont.systemFont(ofSize: 15)
+        countLabel.textColor = .white
+        countLabel.isHidden = true
+        
+        bottomView.isHidden = !YPConfig.library.allowMultipleItems
+    }
+    
+    func showUseButton() {
+        countLabel.isHidden = true
+        useButton.isHidden = false
     }
     
     // MARK: - Square button

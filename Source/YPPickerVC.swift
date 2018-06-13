@@ -22,6 +22,7 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     /// Private callbacks to YPImagePicker
     public var didClose:(() -> Void)?
     public var didSelectItems: (([YPMediaItem]) -> Void)?
+    public var onCamera:(() -> Void)?
     
     enum Mode {
         case library
@@ -111,6 +112,15 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
         YPHelper.changeBackButtonIcon(self)
         YPHelper.changeBackButtonTitle(self)
+        
+        if YPConfig.screens.count == 1 && YPConfig.screens.contains(.library) {
+            var offset: CGFloat = 50
+            if #available(iOS 11.0, *) {
+                offset += v.safeAreaInsets.bottom
+            }
+            v.header.bottomConstraint?.constant = offset
+            v.layoutIfNeeded()
+        }
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -304,6 +314,14 @@ public class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         videoVC?.stopCamera()
         cameraVC?.stopCamera()
     }
+    
+    public func showSelectedCountLabel(count: Int) {
+        let text = "+\(count)"
+        let assetViewContainer = (libraryVC?.view as? YPLibraryView)?.assetViewContainer
+        assetViewContainer?.countLabel.text = text
+        assetViewContainer?.countLabel.isHidden = false
+        assetViewContainer?.useButton.isHidden = true
+    }
 }
 
 extension YPPickerVC: YPLibraryViewDelegate {
@@ -334,5 +352,13 @@ extension YPPickerVC: YPLibraryViewDelegate {
         
         v.header.bottomConstraint?.constant = enabled ? offset : 0
         v.layoutIfNeeded()
+    }
+    
+    public func libraryViewDidToggleCamera() {
+        onCamera?()
+    }
+    
+    public func libraryViewDidToggleUse() {
+        done()
     }
 }
