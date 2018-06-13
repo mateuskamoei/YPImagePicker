@@ -20,6 +20,8 @@ open class YPImagePicker: UINavigationController {
         return .portrait
     }
     
+    public var onCamera: (() -> Void)?
+    
     private var _didFinishPicking: (([YPMediaItem], Bool) -> Void)?
     public func didFinishPicking(completion: @escaping (_ items: [YPMediaItem], _ cancelled: Bool) -> Void) {
         _didFinishPicking = completion
@@ -63,6 +65,9 @@ override open func viewDidLoad() {
         super.viewDidLoad()
         picker.didClose = { [weak self] in
             self?._didFinishPicking?([], true)
+        }
+        picker.onCamera = { [weak self] in
+            self?.onCamera?()
         }
         viewControllers = [picker]
         setupLoadingView()
@@ -157,6 +162,14 @@ override open func viewDidLoad() {
         )
         loadingView.fillContainer()
         loadingView.alpha = 0
+    }
+    
+    public func showSelectedCountLabel(count: Int) {
+        picker.showSelectedCountLabel(count: count)
+    }
+    
+    public func done() {
+        picker.done()
     }
 }
 

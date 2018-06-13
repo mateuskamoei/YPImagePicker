@@ -198,6 +198,10 @@ public struct YPConfigLibrary {
     
     /// Allow to preselected media items
     public var preselectedItems: [YPMediaItem]?
+
+    public var showCamera = false
+    
+    public var allowMultipleItems = false
 }
 
 /// Encapsulates video specific settings.
