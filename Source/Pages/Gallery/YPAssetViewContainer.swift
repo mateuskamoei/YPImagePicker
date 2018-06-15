@@ -89,32 +89,45 @@ class YPAssetViewContainer: UIView {
         multipleSelectionButton.Bottom == zoomableView!.Bottom - 15
         
         
+        let color = UIColor(red: 48.0 / 255.0, green: 66.0 / 255.0, blue: 87.0 / 255.0, alpha: 0.8)
+        
         sv(bottomView)
-        bottomView.backgroundColor = UIColor(white: 0, alpha: 0.1)
-        bottomView.Bottom == zoomableView!.Bottom
-        bottomView.height(42)
+//        bottomView.backgroundColor = UIColor(white: 0, alpha: 0.1)
+        bottomView.Bottom == zoomableView!.Bottom - 12
+        bottomView.height(44)
         |bottomView|
         
         
         bottomView.sv(cameraButton)
-        cameraButton.size(42)
+        cameraButton.size(44)
         |-15-cameraButton
         cameraButton.centerVertically()
         cameraButton.setImage(YPConfig.icons.cameraImage, for: .normal)
+        cameraButton.backgroundColor = color
+        cameraButton.layer.cornerRadius = 22
+        cameraButton.clipsToBounds = true
         
         bottomView.sv(useButton)
-        useButton.width(42)
+        useButton.size(44)
         useButton-15-|
         useButton.centerVertically()
         useButton.setTitle(YPConfig.wordings.use, for: .normal)
         useButton.setTitleColor(.white, for: .normal)
-        useButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        useButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        useButton.backgroundColor = color
+        useButton.layer.cornerRadius = 22
+        useButton.clipsToBounds = true
         
         bottomView.sv(countLabel)
+        countLabel.textAlignment = .center
+        countLabel.size(44)
         countLabel-15-|
         countLabel.centerVertically()
         countLabel.font = UIFont.systemFont(ofSize: 15)
         countLabel.textColor = .white
+        countLabel.backgroundColor = color
+        countLabel.layer.cornerRadius = 22
+        countLabel.clipsToBounds = true
         countLabel.isHidden = true
         
         bottomView.isHidden = !YPConfig.library.allowMultipleItems
