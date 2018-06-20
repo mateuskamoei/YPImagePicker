@@ -102,42 +102,43 @@ class YPAssetViewContainer: UIView {
         
         let color = UIColor(red: 48.0 / 255.0, green: 66.0 / 255.0, blue: 87.0 / 255.0, alpha: 0.8)
         
+        let bottomHeight: CGFloat = 39
         sv(bottomView)
 //        bottomView.backgroundColor = UIColor(white: 0, alpha: 0.1)
-        bottomView.Bottom == zoomableView!.Bottom - 12
-        bottomView.height(44)
+        bottomView.Bottom == zoomableView!.Bottom - 13
+        bottomView.height(bottomHeight)
         |bottomView|
         
         
         bottomView.sv(cameraButton)
-        cameraButton.size(44)
-        |-15-cameraButton
+        cameraButton.size(bottomHeight)
+        |-13-cameraButton
         cameraButton.centerVertically()
         cameraButton.setImage(YPConfig.icons.cameraImage, for: .normal)
         cameraButton.backgroundColor = color
-        cameraButton.layer.cornerRadius = 22
+        cameraButton.layer.cornerRadius = bottomHeight/2
         cameraButton.clipsToBounds = true
         
         bottomView.sv(useButton)
-        useButton.size(44)
-        useButton-15-|
+        useButton.size(bottomHeight)
+        useButton-13-|
         useButton.centerVertically()
-        useButton.setTitle(YPConfig.wordings.use, for: .normal)
+        useButton.setTitle(YPConfig.wordings.add, for: .normal)
         useButton.setTitleColor(.white, for: .normal)
-        useButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        useButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         useButton.backgroundColor = color
-        useButton.layer.cornerRadius = 22
+        useButton.layer.cornerRadius = bottomHeight/2
         useButton.clipsToBounds = true
         
         bottomView.sv(countLabel)
         countLabel.textAlignment = .center
-        countLabel.size(44)
-        countLabel-15-|
+        countLabel.size(bottomHeight)
+        countLabel-13-|
         countLabel.centerVertically()
         countLabel.font = UIFont.systemFont(ofSize: 15)
         countLabel.textColor = .white
         countLabel.backgroundColor = color
-        countLabel.layer.cornerRadius = 22
+        countLabel.layer.cornerRadius = bottomHeight/2
         countLabel.clipsToBounds = true
         countLabel.isHidden = true
         
