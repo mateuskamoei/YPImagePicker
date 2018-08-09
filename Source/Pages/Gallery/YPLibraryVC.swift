@@ -61,6 +61,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit,
 											  YPConfig.library.maxNumberOfItems)
         v.assetViewContainer.cameraButton.isHidden = !YPConfig.library.showCamera
+        v.assetViewContainer.cameraCircle.isHidden = !YPConfig.library.showCamera
         
         if let preselectedItems = YPConfig.library.preselectedItems, !preselectedItems.isEmpty {
             selection = preselectedItems.compactMap { item -> YPLibrarySelection? in

@@ -29,6 +29,7 @@ class YPAssetViewContainer: UIView {
     
     public let bottomView = UIView()
     public let cameraButton = UIButton()
+    public let cameraCircle = UIView()
     public let useButton = UIButton(type: UIButton.ButtonType.system)
     public let countLabel = UILabel()
 
@@ -111,7 +112,6 @@ class YPAssetViewContainer: UIView {
         |bottomView|
         
         
-        let cameraCircle = UIView()
         bottomView.sv(cameraCircle)
         cameraCircle.backgroundColor = UIColor.white.withAlphaComponent(0.5)
         cameraCircle.layer.cornerRadius = outerCircleHeight/2
