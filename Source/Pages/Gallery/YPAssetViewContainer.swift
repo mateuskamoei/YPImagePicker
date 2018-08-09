@@ -91,30 +91,51 @@ class YPAssetViewContainer: UIView {
         
         let color = UIColor(red: 48.0 / 255.0, green: 66.0 / 255.0, blue: 87.0 / 255.0, alpha: 0.8)
         
-        let bottomHeight: CGFloat = 39
+        let bottomHeight: CGFloat = 55
+        let outerCircleHeight: CGFloat = 67
         sv(bottomView)
 //        bottomView.backgroundColor = UIColor(white: 0, alpha: 0.1)
-        bottomView.Bottom == zoomableView!.Bottom - 13
+        bottomView.Bottom == zoomableView!.Bottom - 25
         bottomView.height(bottomHeight)
         |bottomView|
         
         
+        let cameraCircle = UIView()
+        bottomView.sv(cameraCircle)
+        cameraCircle.backgroundColor = UIColor.white.withAlphaComponent(0.5)
+        cameraCircle.layer.cornerRadius = outerCircleHeight/2
+        cameraCircle.clipsToBounds = true
+        |-13-cameraCircle
+        cameraCircle.size(outerCircleHeight)
+        cameraCircle.centerVertically()
+        
         bottomView.sv(cameraButton)
         cameraButton.size(bottomHeight)
-        |-13-cameraButton
-        cameraButton.centerVertically()
+        cameraButton.CenterX == cameraCircle.CenterX
+        cameraButton.CenterY == cameraCircle.CenterY
         cameraButton.setImage(YPConfig.icons.cameraImage, for: .normal)
         cameraButton.backgroundColor = color
         cameraButton.layer.cornerRadius = bottomHeight/2
         cameraButton.clipsToBounds = true
         
+        
+        let useCircle = UIView()
+        bottomView.sv(useCircle)
+        useCircle.backgroundColor = UIColor.white.withAlphaComponent(0.5)
+        useCircle.layer.cornerRadius = outerCircleHeight/2
+        useCircle.clipsToBounds = true
+        useCircle-13-|
+        useCircle.size(outerCircleHeight)
+        useCircle.centerVertically()
+        
+        
         bottomView.sv(useButton)
         useButton.size(bottomHeight)
-        useButton-13-|
-        useButton.centerVertically()
+        useButton.CenterX == useCircle.CenterX
+        useButton.CenterY == useCircle.CenterY
         useButton.setTitle(YPConfig.wordings.add, for: .normal)
         useButton.setTitleColor(.white, for: .normal)
-        useButton.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        useButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
         useButton.backgroundColor = color
         useButton.layer.cornerRadius = bottomHeight/2
         useButton.clipsToBounds = true
@@ -122,9 +143,9 @@ class YPAssetViewContainer: UIView {
         bottomView.sv(countLabel)
         countLabel.textAlignment = .center
         countLabel.size(bottomHeight)
-        countLabel-13-|
-        countLabel.centerVertically()
-        countLabel.font = UIFont.systemFont(ofSize: 15)
+        countLabel.CenterX == useCircle.CenterX
+        countLabel.CenterY == useCircle.CenterY
+        countLabel.font = UIFont.systemFont(ofSize: 20)
         countLabel.textColor = .white
         countLabel.backgroundColor = color
         countLabel.layer.cornerRadius = bottomHeight/2
