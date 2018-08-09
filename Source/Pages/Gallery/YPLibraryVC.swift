@@ -64,6 +64,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1)
         v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit, YPConfig.library.maxNumberOfItems)
         v.assetViewContainer.cameraButton.isHidden = !YPConfig.library.showCamera
+        v.assetViewContainer.cameraCircle.isHidden = !YPConfig.library.showCamera
     }
     
     // MARK: - View Lifecycle
