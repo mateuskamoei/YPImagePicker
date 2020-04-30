@@ -79,7 +79,7 @@ class YPAssetViewContainer: UIView {
             sv(squareCropButton)
             squareCropButton.size(42)
             |-15-squareCropButton
-            squareCropButton.Bottom == zoomableView!.Bottom - 15
+            squareCropButton.Top == zoomableView!.Top + 15
         }
         
         // Multiple selection button
@@ -87,7 +87,7 @@ class YPAssetViewContainer: UIView {
         multipleSelectionButton.size(42)
         multipleSelectionButton-15-|
         multipleSelectionButton.setImage(YPConfig.icons.multipleSelectionOffIcon, for: .normal)
-        multipleSelectionButton.Bottom == zoomableView!.Bottom - 15
+        multipleSelectionButton.Top == zoomableView!.Top + 15
         
         
         let color = UIColor(red: 48.0 / 255.0, green: 66.0 / 255.0, blue: 87.0 / 255.0, alpha: 0.8)
