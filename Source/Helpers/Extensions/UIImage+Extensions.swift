@@ -56,22 +56,26 @@ internal extension UIImage {
         }
         
         // Draw a new image with the calculated transform
-        let context = CGContext(data: nil,
-                                width: Int(size.width),
-                                height: Int(size.height),
-                                bitsPerComponent: cgImage!.bitsPerComponent,
-                                bytesPerRow: 0,
-                                space: cgImage!.colorSpace!,
-                                bitmapInfo: cgImage!.bitmapInfo.rawValue)
-        context?.concatenate(transform)
+        guard let cgImage = cgImage,
+            let colorSpace = cgImage.colorSpace,
+            let context = CGContext(data: nil,
+                                    width: Int(size.width),
+                                    height: Int(size.height),
+                                    bitsPerComponent: cgImage.bitsPerComponent,
+                                    bytesPerRow: 0,
+                                    space: colorSpace,
+                                    bitmapInfo: cgImage.bitmapInfo.rawValue) else {
+                                        return self
+        }
+        context.concatenate(transform)
         switch imageOrientation {
         case .left, .leftMirrored, .right, .rightMirrored:
-            context?.draw(cgImage!, in: CGRect(x: 0, y: 0, width: size.height, height: size.width))
+            context.draw(cgImage, in: CGRect(x: 0, y: 0, width: size.height, height: size.width))
         default:
-            context?.draw(cgImage!, in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
+            context.draw(cgImage, in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
         }
         
-        if let newImageRef =  context?.makeImage() {
+        if let newImageRef =  context.makeImage() {
             let newImage = UIImage(cgImage: newImageRef)
             return newImage
         }
