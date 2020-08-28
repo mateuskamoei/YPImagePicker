@@ -160,6 +160,16 @@ public struct YPImagePickerConfiguration {
     
 }
 
+public struct YPCollectionFetchData {
+    let type: PHAssetCollectionType
+    let subType: PHAssetCollectionSubtype
+    
+    public init(type: PHAssetCollectionType, subType: PHAssetCollectionSubtype) {
+        self.type = type
+        self.subType = subType
+    }
+}
+
 /// Encapsulates library specific settings.
 public struct YPConfigLibrary {
     
@@ -202,6 +212,8 @@ public struct YPConfigLibrary {
     public var showCamera = false
     
     public var allowMultipleItems = false
+    
+    public var defaultCollection: YPCollectionFetchData? = nil
 }
 
 /// Encapsulates video specific settings.
