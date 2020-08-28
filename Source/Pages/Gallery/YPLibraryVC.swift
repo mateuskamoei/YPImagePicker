@@ -55,6 +55,18 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         registerForLibraryChanges()
         panGestureHelper.registerForPanGesture(on: v)
         registerForTapOnPreview()
+        
+        if let defaultCollection = YPConfig.library.defaultCollection {
+            let smartAlbumsResult = PHAssetCollection.fetchAssetCollections(with: defaultCollection.type,
+                                                                            subtype: defaultCollection.subType,
+                                                                            options: nil)
+            if let assetCollection = smartAlbumsResult.firstObject {
+                var album = YPAlbum()
+                album.title = assetCollection.localizedTitle ?? ""
+                setAlbum(album)
+            }
+        }
+        
         refreshMediaRequest()
 
         v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1)
@@ -187,10 +199,11 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         multipleSelectionEnabled = !multipleSelectionEnabled
         
         if multipleSelectionEnabled {
+
             if selection.isEmpty && YPConfig.library.preSelectItemOnMultipleSelection,
 				delegate?.libraryViewShouldAddToSelection(indexPath: IndexPath(row: currentlySelectedIndex, section: 0),
 														  numSelections: selection.count) ?? true {
-                let asset = mediaManager.fetchResult[currentlySelectedIndex]
+                let asset = mediaManager.fetchResult.assetAtIndex(currentlySelectedIndex)
                 selection = [
                     YPLibrarySelection(index: currentlySelectedIndex,
                                        cropRect: v.currentCropRect(),
@@ -297,7 +310,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         }
         
         if mediaManager.hasResultItems {
-            changeAsset(mediaManager.fetchResult[0])
+            changeAsset(mediaManager.fetchResult.assetAtIndex(0))
             v.collectionView.reloadData()
             v.collectionView.selectItem(at: IndexPath(row: 0, section: 0),
                                              animated: false,
@@ -313,6 +326,11 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     
     func buildPHFetchOptions() -> PHFetchOptions {
         // Sorting condition
+        if YPConfig.library.defaultCollection != nil {
+            let options = PHFetchOptions()
+            options.predicate = YPConfig.library.mediaType.predicate()
+            return options
+        }
         if let userOpt = YPConfig.library.options {
             return userOpt
         }

@@ -43,7 +43,7 @@ extension YPLibraryVC {
         multipleSelectionButtonTapped()
         
         // Update preview.
-        changeAsset(mediaManager.fetchResult[indexPath.row])
+        changeAsset(mediaManager.fetchResult.assetAtIndex(indexPath.row))
         
         // Bring preview down and keep selected cell visible.
         panGestureHelper.resetToOriginalState()
@@ -58,7 +58,7 @@ extension YPLibraryVC {
     /// Removes cell from selection
     func deselect(indexPath: IndexPath) {
         if let positionIndex = selection.firstIndex(where: {
-			$0.assetIdentifier == mediaManager.fetchResult[indexPath.row].localIdentifier
+			$0.assetIdentifier == mediaManager.fetchResult.assetAtIndex(indexPath.row).localIdentifier
 		}) {
             selection.remove(at: positionIndex)
 
@@ -76,7 +76,7 @@ extension YPLibraryVC {
                 v.collectionView.deselectItem(at: indexPath, animated: false)
                 v.collectionView.selectItem(at: previouslySelectedIndexPath, animated: false, scrollPosition: [])
                 currentlySelectedIndex = previouslySelectedIndexPath.row
-                changeAsset(mediaManager.fetchResult[previouslySelectedIndexPath.row])
+                changeAsset(mediaManager.fetchResult.assetAtIndex(previouslySelectedIndexPath.row))
             }
 			
             checkLimit()
@@ -89,7 +89,7 @@ extension YPLibraryVC {
             return
         }
         
-        let asset = mediaManager.fetchResult[indexPath.item]
+        let asset = mediaManager.fetchResult.assetAtIndex(indexPath.item)
         selection.append(
             YPLibrarySelection(
                 index: indexPath.row,
@@ -101,7 +101,7 @@ extension YPLibraryVC {
     
     func isInSelectionPool(indexPath: IndexPath) -> Bool {
         return selection.contains(where: {
-			$0.assetIdentifier == mediaManager.fetchResult[indexPath.row].localIdentifier
+			$0.assetIdentifier == mediaManager.fetchResult.assetAtIndex(indexPath.row).localIdentifier
 		})
     }
     
@@ -121,7 +121,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
     
     public func collectionView(_ collectionView: UICollectionView,
                                cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let asset = mediaManager.fetchResult[indexPath.item]
+        let asset = mediaManager.fetchResult.assetAtIndex(indexPath.item)
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "YPLibraryViewCell",
                                                             for: indexPath) as? YPLibraryViewCell else {
                                                                 fatalError("unexpected cell in collection view")
@@ -172,7 +172,7 @@ extension YPLibraryVC: UICollectionViewDelegate {
         let previouslySelectedIndexPath = IndexPath(row: currentlySelectedIndex, section: 0)
         currentlySelectedIndex = indexPath.row
 
-        changeAsset(mediaManager.fetchResult[indexPath.row])
+        changeAsset(mediaManager.fetchResult.assetAtIndex(indexPath.row))
         panGestureHelper.resetToOriginalState()
         
         // Only scroll cell to top if preview is hidden.
