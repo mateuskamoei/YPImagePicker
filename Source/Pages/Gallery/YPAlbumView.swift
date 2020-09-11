@@ -21,6 +21,7 @@ class YPAlbumView: UIView {
             tableView,
             spinner
         )
+        tableView.contentInset = UIEdgeInsets.init(top: 8, left: 0, bottom: 0, right: 0)
         // TableView needs to be the first subview for it to automatically adjust its content inset with the NavBar
         
         spinner.centerInContainer()

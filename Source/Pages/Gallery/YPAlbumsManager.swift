@@ -62,6 +62,11 @@ class YPAlbumsManager {
                 }
             })
         }
+        
+        albums.sort { (lhs, rhs) -> Bool in
+            return lhs.title < rhs.title
+        }
+        
         cachedAlbums = albums
         return albums
     }

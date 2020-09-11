@@ -28,6 +28,10 @@ open class YPImagePicker: UINavigationController {
     }
     public weak var imagePickerDelegate: YPImagePickerDelegate?
     
+    public var titleChanged: ((String) -> Void)?
+    public var albumsOpened: (() -> Void)?
+    public var albumsClosed: (() -> Void)?
+    
     open override var preferredStatusBarStyle: UIStatusBarStyle {
         return YPImagePickerConfiguration.shared.preferredStatusBarStyle
     }
@@ -61,7 +65,7 @@ open class YPImagePicker: UINavigationController {
         fatalError("init(coder:) has not been implemented")
     }
     
-override open func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
         picker.didClose = { [weak self] in
             self?._didFinishPicking?([], true)
@@ -72,7 +76,7 @@ override open func viewDidLoad() {
         viewControllers = [picker]
         setupLoadingView()
         navigationBar.isTranslucent = false
-
+        
         picker.didSelectItems = { [weak self] items in
             // Use Fade transition instead of default push animation
             let transition = CATransition()
@@ -150,6 +154,18 @@ override open func viewDidLoad() {
                 }
             }
         }
+        
+        picker.titleChanged = { [weak self] title in
+            self?.titleChanged?(title)
+        }
+        
+        picker.albumsOpened = { [weak self] in
+            self?.albumsOpened?()
+        }
+        
+        picker.albumsClosed = { [weak self] in
+            self?.albumsClosed?()
+        }
     }
     
     deinit {
@@ -170,6 +186,14 @@ override open func viewDidLoad() {
     
     public func done() {
         picker.done()
+    }
+    
+    public func openAlbums() {
+        picker.navBarTapped()
+    }
+    
+    public func closeAlbums() {
+        picker.closeAlbums()
     }
 }
 

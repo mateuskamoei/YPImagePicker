@@ -214,6 +214,8 @@ public struct YPConfigLibrary {
     public var allowMultipleItems = false
     
     public var defaultCollection: YPCollectionFetchData? = nil
+    
+    public var childAlbumSelector = false
 }
 
 /// Encapsulates video specific settings.
