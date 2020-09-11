@@ -34,7 +34,9 @@ class YPAlbumsManager {
                 album.title = assetCollection.localizedTitle ?? ""
                 album.numberOfItems = self.mediaCountFor(collection: assetCollection)
                 if album.numberOfItems > 0 {
-                    let r = PHAsset.fetchKeyAssets(in: assetCollection, options: nil)
+                    let options = PHFetchOptions()
+                    options.predicate = YPConfig.library.mediaType.predicate()
+                    let r = PHAsset.fetchKeyAssets(in: assetCollection, options: options)
                     if let first = r?.firstObject {
                         let deviceScale = UIScreen.main.scale
                         let targetSize = CGSize(width: 78*deviceScale, height: 78*deviceScale)
