@@ -31,17 +31,23 @@ class YPAlbumCell: UITableViewCell {
         )
         
         layout(
-            6,
-            |-10-thumbnail.size(78),
-            6
+            8,
+            |-15-thumbnail.size(90),
+            8
         )
         
-        align(horizontally: thumbnail-10-stackView)
+        align(horizontally: thumbnail-15-stackView)
         
         thumbnail.contentMode = .scaleAspectFill
         thumbnail.clipsToBounds = true
         
-        title.font = YPConfig.fonts.albumCellTitleFont
-        numberOfItems.font = YPConfig.fonts.albumCellNumberOfItemsFont
+//        TODO: use config options
+//        title.font = YPConfig.fonts.albumCellTitleFont
+//        numberOfItems.font = YPConfig.fonts.albumCellNumberOfItemsFont
+        
+        title.font = UIFont.systemFont(ofSize: 18, weight: UIFont.Weight.regular)
+        title.textColor = UIColor(r: 48, g: 66, b: 87)
+        numberOfItems.font = UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.regular)
+        numberOfItems.textColor = UIColor(r: 152, g: 152, b: 152)
     }
 }

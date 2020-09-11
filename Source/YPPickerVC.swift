@@ -30,6 +30,9 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     public var didClose:(() -> Void)?
     public var didSelectItems: (([YPMediaItem]) -> Void)?
     public var onCamera:(() -> Void)?
+    public var titleChanged: ((String) -> Void)?
+    public var albumsOpened: (() -> Void)?
+    public var albumsClosed: (() -> Void)?
     
     enum Mode {
         case library
@@ -40,6 +43,8 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     private var libraryVC: YPLibraryVC?
     private var cameraVC: YPCameraVC?
     private var videoVC: YPVideoCaptureVC?
+    
+    private var albumsVC: YPAlbumVC?
     
     var mode = Mode.camera
     
@@ -206,15 +211,52 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
     @objc
     func navBarTapped() {
         let vc = YPAlbumVC(albumsManager: albumsManager)
-        let navVC = UINavigationController(rootViewController: vc)
-        navVC.navigationBar.tintColor = .ypLabel
+        albumsVC = vc
         
-        vc.didSelectAlbum = { [weak self] album in
-            self?.libraryVC?.setAlbum(album)
-            self?.setTitleViewWithTitle(aTitle: album.title)
-            navVC.dismiss(animated: true, completion: nil)
+        if YPConfig.library.childAlbumSelector {
+            
+            addChild(vc)
+            view.sv(vc.view)
+            vc.view.fillHorizontally()
+            vc.view.Height == view.Height
+            let height = view.frame.size.height
+            let top = vc.view.Top == height
+            view.layoutIfNeeded()
+            
+            top.constant = 0
+            UIView.animate(withDuration: 0.3) {
+                self.view.layoutIfNeeded()
+            }
+            
+            vc.didSelectAlbum = { [weak self] album in
+                self?.libraryVC?.setAlbum(album)
+                self?.setTitleViewWithTitle(aTitle: album.title)
+                self?.closeAlbums()
+            }
+        } else {
+            let navVC = UINavigationController(rootViewController: vc)
+            navVC.navigationBar.tintColor = .ypLabel
+            
+            vc.didSelectAlbum = { [weak self] album in
+                self?.libraryVC?.setAlbum(album)
+                self?.setTitleViewWithTitle(aTitle: album.title)
+                navVC.dismiss(animated: true, completion: nil)
+            }
+            present(navVC, animated: true, completion: nil)
         }
-        present(navVC, animated: true, completion: nil)
+        albumsOpened?()
+    }
+    
+    func closeAlbums() {
+        albumsVC?.view.topConstraint?.constant = view.frame.size.height
+        UIView.animate(withDuration: 0.3, animations: {
+            self.view.layoutIfNeeded()
+        }) { [weak self] (_) in
+            self?.albumsVC?.removeFromParent()
+            self?.albumsVC?.view.removeFromSuperview()
+            self?.albumsVC = nil
+        }
+        albumsClosed?()
     }
     
     func setTitleViewWithTitle(aTitle: String) {
@@ -267,6 +309,7 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         
         titleView.heightAnchor.constraint(equalToConstant: 40).isActive = true
         navigationItem.titleView = titleView
+        titleChanged?(aTitle)
     }
     
     func updateUI() {
