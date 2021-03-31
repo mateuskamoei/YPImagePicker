@@ -16,7 +16,11 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
     internal var isProcessing = false // true if video or image is in processing state
     internal var multipleSelectionEnabled = false
     internal var initialized = false
-    internal var selection = [YPLibrarySelection]()
+    internal var selection = [YPLibrarySelection]() {
+        didSet {
+            v.assetViewContainer.useButton.isHidden = selection.isEmpty
+        }
+    }
     internal var currentlySelectedIndex: Int = 0
     internal let mediaManager = LibraryMediaManager()
     internal var latestImageTapped = ""
@@ -67,11 +71,16 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
             }
         }
         
+        selection.removeAll()
         refreshMediaRequest()
 
-        v.assetViewContainer.multipleSelectionButton.isHidden = !(YPConfig.library.maxNumberOfItems > 1)
-        v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit,
-											  YPConfig.library.maxNumberOfItems)
+        v.assetViewContainer.multipleSelectionButton.isHidden = YPConfig.library.forceHideMultipleSelectionButton || !(YPConfig.library.maxNumberOfItems > 1)
+        if let maxNumberWarningLabelText = YPConfig.library.maxNumberWarningLabelText {
+            v.maxNumberWarningLabel.text = maxNumberWarningLabelText
+        } else {
+            v.maxNumberWarningLabel.text = String(format: YPConfig.wordings.warningMaxItemsLimit,
+                                                  YPConfig.library.maxNumberOfItems)
+        }
         v.assetViewContainer.cameraButton.isHidden = !YPConfig.library.showCamera
         v.assetViewContainer.cameraCircle.isHidden = !YPConfig.library.showCamera
         
@@ -360,7 +369,7 @@ public class YPLibraryVC: UIViewController, YPPermissionCheckable {
         let completion = { (isLowResIntermediaryImage: Bool) in
             self.v.hideOverlayView()
             self.v.assetViewContainer.refreshSquareCropButton()
-            self.v.assetViewContainer.showUseButton()
+            self.v.assetViewContainer.showUseButton(isHidden: self.selection.isEmpty)
             self.updateCropInfo()
             if !isLowResIntermediaryImage {
                 self.v.hideLoader()

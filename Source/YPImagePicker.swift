@@ -78,7 +78,7 @@ open class YPImagePicker: UINavigationController {
         setupLoadingView()
         navigationBar.isTranslucent = false
         
-        picker.didSelectItems = { [weak self] items in
+        picker.didSelectItems = { [weak self, weak picker] items in
             // Use Fade transition instead of default push animation
             let transition = CATransition()
             transition.duration = 0.3
@@ -88,6 +88,7 @@ open class YPImagePicker: UINavigationController {
             
             // Multiple items flow
             if items.count > 1 {
+                picker?.clearLibrarySelection()
                 if YPConfig.library.skipSelectionsGallery {
                     self?.didSelect(items: items)
                     return
@@ -153,6 +154,10 @@ open class YPImagePicker: UINavigationController {
                 } else {
                     self?.didSelect(items: [YPMediaItem.video(v: video)])
                 }
+            }
+            
+            if picker?.isLibraryMultipleSelectionEnabled ?? false {
+                picker?.clearLibrarySelection()
             }
         }
         

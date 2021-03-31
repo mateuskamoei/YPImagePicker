@@ -389,6 +389,14 @@ open class YPPickerVC: YPBottomPager, YPBottomPagerDelegate {
         assetViewContainer?.countLabel.isHidden = false
         assetViewContainer?.useButton.isHidden = true
     }
+    
+    func clearLibrarySelection() {
+        libraryVC?.deselectAll()
+    }
+    
+    var isLibraryMultipleSelectionEnabled: Bool {
+        return libraryVC?.multipleSelectionEnabled ?? false
+    }
 }
 
 extension YPPickerVC: YPLibraryViewDelegate {

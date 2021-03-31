@@ -24,9 +24,13 @@ internal extension PHFetchResult where ObjectType == PHAsset {
 
 internal extension PHFetchResult {
     
+    @objc func adjustedIndex(_ index: Int) -> Int {
+        return count - index - 1
+    }
+    
     @objc func assetAtIndex(_ index: Int) -> ObjectType {
         // Reverse order
-        return self[count - index - 1]
+        return self[adjustedIndex(index)]
     }
     
 }

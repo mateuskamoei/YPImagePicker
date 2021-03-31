@@ -31,6 +31,7 @@ class YPAssetViewContainer: UIView {
     public let cameraButton = UIButton()
     public let cameraCircle = UIView()
     public let useButton = UIButton(type: UIButton.ButtonType.system)
+    public let useCircle = UIView()
     public let countLabel = UILabel()
 
     public var itemOverlayType = YPConfig.library.itemOverlayType
@@ -130,7 +131,6 @@ class YPAssetViewContainer: UIView {
         cameraButton.clipsToBounds = true
         
         
-        let useCircle = UIView()
         bottomView.sv(useCircle)
         useCircle.backgroundColor = UIColor.white.withAlphaComponent(0.5)
         useCircle.layer.cornerRadius = outerCircleHeight/2
@@ -166,9 +166,10 @@ class YPAssetViewContainer: UIView {
         bottomView.isHidden = !YPConfig.library.allowMultipleItems
     }
     
-    func showUseButton() {
+    func showUseButton(isHidden: Bool) {
         countLabel.isHidden = true
-        useButton.isHidden = false
+        useButton.isHidden = isHidden
+        useCircle.isHidden = isHidden
     }
     
     // MARK: - Square button

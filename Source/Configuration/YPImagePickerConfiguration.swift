@@ -208,6 +208,8 @@ public struct YPConfigLibrary {
 
     /// Pre-selects the current item on setting multiple selection
     public var preSelectItemOnMultipleSelection = true
+    
+    public var forceHideMultipleSelectionButton = false
 
     /// Anything superior than 1 will enable the multiple selection feature.
     public var maxNumberOfItems = 1
@@ -238,6 +240,8 @@ public struct YPConfigLibrary {
     public var defaultCollection: YPCollectionFetchData? = nil
     
     public var childAlbumSelector = false
+    
+    public var maxNumberWarningLabelText: String?
 }
 
 /// Encapsulates video specific settings.

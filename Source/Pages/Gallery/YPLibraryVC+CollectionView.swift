@@ -55,6 +55,12 @@ extension YPLibraryVC {
     
     // MARK: - Library collection view cell managing
     
+    func deselectAll() {
+        selection.removeAll()
+        let indexPaths = v.collectionView.indexPathsForVisibleItems
+        v.collectionView.reloadItems(at: indexPaths)
+    }
+    
     /// Removes cell from selection
     func deselect(indexPath: IndexPath) {
         if let positionIndex = selection.firstIndex(where: {
@@ -66,13 +72,13 @@ extension YPLibraryVC {
             var selectedIndexPaths = [IndexPath]()
             mediaManager.fetchResult.enumerateObjects { [unowned self] (asset, index, _) in
                 if self.selection.contains(where: { $0.assetIdentifier == asset.localIdentifier }) {
-                    selectedIndexPaths.append(IndexPath(row: index, section: 0))
+                    selectedIndexPaths.append(IndexPath(row: mediaManager.fetchResult.adjustedIndex(index), section: 0))
                 }
             }
             v.collectionView.reloadItems(at: selectedIndexPaths)
 			
             // Replace the current selected image with the previously selected one
-            if let previouslySelectedIndexPath = selectedIndexPaths.last {
+            if let previouslySelectedIndexPath = selectedIndexPaths.first {
                 v.collectionView.deselectItem(at: indexPath, animated: false)
                 v.collectionView.selectItem(at: previouslySelectedIndexPath, animated: false, scrollPosition: [])
                 currentlySelectedIndex = previouslySelectedIndexPath.row
