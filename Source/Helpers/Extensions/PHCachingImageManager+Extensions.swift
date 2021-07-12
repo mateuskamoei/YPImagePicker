@@ -8,6 +8,7 @@
 
 import UIKit
 import Photos
+import SDWebImage
 
 extension PHCachingImageManager {
     
@@ -23,7 +24,7 @@ extension PHCachingImageManager {
     func fetchImage(for asset: PHAsset,
 					cropRect: CGRect,
 					targetSize: CGSize,
-					callback: @escaping (UIImage, [String: Any]) -> Void) {
+					callback: @escaping (Data, UIImage, [String: Any]) -> Void) {
         let options = photoImageRequestOptions()
     
         // Fetch Highiest quality image possible.
@@ -40,7 +41,7 @@ extension PHCachingImageManager {
                 if let imageRef = image.cgImage?.cropping(to: scaledCropRect) {
                     let croppedImage = UIImage(cgImage: imageRef)
                     let exifs = self.metadataForImageData(data: data)
-                    callback(croppedImage, exifs)
+                    callback(data, croppedImage, exifs)
                 }
             }
         }
@@ -91,15 +92,29 @@ extension PHCachingImageManager {
         options.isNetworkAccessAllowed = true
 		// Get 2 results, one low res quickly and the high res one later.
         options.deliveryMode = .opportunistic
-        requestImage(for: asset, targetSize: PHImageManagerMaximumSize,
-					 contentMode: .aspectFill, options: options) { result, info in
-            guard let image = result else {
-                print("No Result 🛑")
-                return
+        if asset.playbackStyle == .imageAnimated {
+            requestImageData(for: asset,
+                             options: options) { data, s, orientation, dict in
+                guard let data = data,
+                      let image = SDAnimatedImage(data: data) ?? UIImage(data: data) else {
+                    print("No Result 🛑")
+                    return
+                }
+                DispatchQueue.main.async {
+                    callback(image, false)
+                }
             }
-            DispatchQueue.main.async {
-                let isLowRes = (info?[PHImageResultIsDegradedKey] as? Bool) ?? false
-                callback(image, isLowRes)
+        } else {
+            requestImage(for: asset, targetSize: PHImageManagerMaximumSize,
+                         contentMode: .aspectFill, options: options) { result, info in
+                guard let image = result else {
+                    print("No Result 🛑")
+                    return
+                }
+                DispatchQueue.main.async {
+                    let isLowRes = (info?[PHImageResultIsDegradedKey] as? Bool) ?? false
+                    callback(image, isLowRes)
+                }
             }
         }
     }

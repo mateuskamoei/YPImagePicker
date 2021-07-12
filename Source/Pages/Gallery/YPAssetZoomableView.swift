@@ -9,6 +9,7 @@
 
 import UIKit
 import Photos
+import SDWebImage
 
 protocol YPAssetZoomableViewDelegate: class {
     func ypAssetZoomableViewDidLayoutSubviews(_ zoomableView: YPAssetZoomableView)
@@ -20,7 +21,7 @@ final class YPAssetZoomableView: UIScrollView {
     public weak var myDelegate: YPAssetZoomableViewDelegate?
     public var cropAreaDidChange = {}
     public var isVideoMode = false
-    public var photoImageView = UIImageView()
+    public var photoImageView = SDAnimatedImageView()
     public var videoView = YPVideoView()
     public var squaredZoomScale: CGFloat = 1
     public var minWidth: CGFloat? = YPConfig.library.minWidthForItem
