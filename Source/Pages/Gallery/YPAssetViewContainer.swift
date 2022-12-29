@@ -29,9 +29,7 @@ class YPAssetViewContainer: UIView {
     
     public let bottomView = UIView()
     public let cameraButton = UIButton()
-    public let cameraCircle = UIView()
     public let useButton = UIButton(type: UIButton.ButtonType.system)
-    public let useCircle = UIView()
     public let countLabel = UILabel()
 
     public var itemOverlayType = YPConfig.library.itemOverlayType
@@ -89,8 +87,8 @@ class YPAssetViewContainer: UIView {
             // Crop Button
             squareCropButton.setImage(YPConfig.icons.cropIcon, for: .normal)
             sv(squareCropButton)
-            squareCropButton.size(42)
-            |-15-squareCropButton
+            squareCropButton.size(45)
+            squareCropButton-15-|
             squareCropButton.Top == zoomableView!.Top + 15
         }
         
@@ -102,9 +100,9 @@ class YPAssetViewContainer: UIView {
         multipleSelectionButton.Top == zoomableView!.Top + 15
         
         
-        let color = UIColor(red: 48.0 / 255.0, green: 66.0 / 255.0, blue: 87.0 / 255.0, alpha: 0.8)
+        let color = UIColor(red: 51.0 / 255.0, green: 51.0 / 255.0, blue: 51.0 / 255.0, alpha: 1.0)
         
-        let bottomHeight: CGFloat = 55
+        let bottomHeight: CGFloat = 45
         let outerCircleHeight: CGFloat = 67
         sv(bottomView)
 //        bottomView.backgroundColor = UIColor(white: 0, alpha: 0.1)
@@ -112,41 +110,20 @@ class YPAssetViewContainer: UIView {
         bottomView.height(bottomHeight)
         |bottomView|
         
-        
-        bottomView.sv(cameraCircle)
-        cameraCircle.backgroundColor = UIColor.white.withAlphaComponent(0.5)
-        cameraCircle.layer.cornerRadius = outerCircleHeight/2
-        cameraCircle.clipsToBounds = true
-        |-13-cameraCircle
-        cameraCircle.size(outerCircleHeight)
-        cameraCircle.centerVertically()
-        
-        bottomView.sv(cameraButton)
+        sv(cameraButton)
         cameraButton.size(bottomHeight)
-        cameraButton.CenterX == cameraCircle.CenterX
-        cameraButton.CenterY == cameraCircle.CenterY
+        |-15-cameraButton
+        cameraButton.Top == zoomableView!.Top + 15
         cameraButton.setImage(YPConfig.icons.cameraImage, for: .normal)
-        cameraButton.backgroundColor = color
-        cameraButton.layer.cornerRadius = bottomHeight/2
         cameraButton.clipsToBounds = true
-        
-        
-        bottomView.sv(useCircle)
-        useCircle.backgroundColor = UIColor.white.withAlphaComponent(0.5)
-        useCircle.layer.cornerRadius = outerCircleHeight/2
-        useCircle.clipsToBounds = true
-        useCircle-13-|
-        useCircle.size(outerCircleHeight)
-        useCircle.centerVertically()
-        
         
         bottomView.sv(useButton)
         useButton.size(bottomHeight)
-        useButton.CenterX == useCircle.CenterX
-        useButton.CenterY == useCircle.CenterY
+        useButton-15-|
+        useButton.centerVertically()
         useButton.setTitle(YPConfig.wordings.add, for: .normal)
         useButton.setTitleColor(.white, for: .normal)
-        useButton.titleLabel?.font = UIFont.systemFont(ofSize: 20)
+        useButton.titleLabel?.font = UIFont.systemFont(ofSize: 17)
         useButton.backgroundColor = color
         useButton.layer.cornerRadius = bottomHeight/2
         useButton.clipsToBounds = true
@@ -154,9 +131,9 @@ class YPAssetViewContainer: UIView {
         bottomView.sv(countLabel)
         countLabel.textAlignment = .center
         countLabel.size(bottomHeight)
-        countLabel.CenterX == useCircle.CenterX
-        countLabel.CenterY == useCircle.CenterY
-        countLabel.font = UIFont.systemFont(ofSize: 20)
+        countLabel.CenterX == useButton.CenterX
+        countLabel.CenterY == useButton.CenterY
+        countLabel.font = UIFont.systemFont(ofSize: 17)
         countLabel.textColor = .white
         countLabel.backgroundColor = color
         countLabel.layer.cornerRadius = bottomHeight/2
@@ -169,7 +146,6 @@ class YPAssetViewContainer: UIView {
     func showUseButton(isHidden: Bool) {
         countLabel.isHidden = true
         useButton.isHidden = isHidden
-        useCircle.isHidden = isHidden
     }
     
     // MARK: - Square button
